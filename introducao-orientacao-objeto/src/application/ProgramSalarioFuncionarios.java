@@ -21,43 +21,49 @@ public class ProgramSalarioFuncionarios {
 		for(int i=0; i < quantidadeFuncionarios; i++) {
 			System.out.println("Funcionario #" + (i+1) + ": ");
 			System.out.print("Id: ");
-			Integer identidadeDoFuncionario = sc.nextInt();
+			int identidadeDoFuncionario = sc.nextInt();
+			
+			while (procuraID(lista, identidadeDoFuncionario)) {
+				System.out.println("ID já escolhido. Digite outro: ");
+				identidadeDoFuncionario = sc.nextInt();
+			}
+			
 			System.out.print("Nome: ");
 			sc.nextLine();
 			String nomeDoFuncionario = sc.nextLine();
 			System.out.println("Salário: ");
-			Double salarioDoFuncionario = sc.nextDouble();
+			double salarioDoFuncionario = sc.nextDouble();
 			
 			Funcionario funcionario = new Funcionario(identidadeDoFuncionario, nomeDoFuncionario, salarioDoFuncionario);
 			
 			lista.add(funcionario);	
+		 }
 			
-			System.out.println("Digite o ID do funcionário para aumentar salário: ");
-			Integer idAumentoSalario = sc.nextInt();
-			Integer posicao = posicaoID(lista, identidadeDoFuncionario);
+		System.out.println("Digite o ID do funcionário para aumentar salário: ");
+		int idAumentoSalario = sc.nextInt();
+		Funcionario funcionario = lista.stream().filter(x -> x.getIdentidadeDoFuncionario() == idAumentoSalario).findFirst().orElse(null);
+		if (funcionario == null) {
+			System.out.println("Esse ID não existe! Digite outro: ");
 			
-			if(posicao == null) {
-				System.out.println("Esse ID não existe!!");
-			} else {
-				System.out.println("Digite a porcentagem de aumento do salário: ");
-				double porcentagem = sc.nextDouble();
-				lista.get(posicao).aumentaSalario(porcentagem);
-			}
-			
-			
-			
+		} else {
+			System.out.println("Digite a porcentagem de aumento do salário: ");
+			double porcentagem = sc.nextDouble();
+			funcionario.aumentaSalario(porcentagem);
+		}
+		
+		System.out.println();
+		System.out.println("Lista de funcionários: ");
+		for (Funcionario cadaFuncionario : lista) {
+			System.out.printf(cadaFuncionario + ", %.2f %n",cadaFuncionario.getSalarioDoFuncionario());
 		}
 			
-		sc.close();
-	}
+			
+		sc.close();	
+	}	
 	
-	public static Integer posicaoID (List<Funcionario> lista, int id) {
-		for (int i = 0; i < lista.size() ; i++) {
-			if (lista.get(i).getIdentidadeDoFuncionario() == id ) {
-				return i;
-			} else {
-				return null;
-			}
-		} 
-	}
+		public static boolean procuraID(List<Funcionario> lista, int id) {
+			Funcionario funcionario = lista.stream().filter(x -> x.getIdentidadeDoFuncionario() == id).findFirst().orElse(null);
+			return funcionario != null;
+		}
 }
+

@@ -40,6 +40,11 @@ public class Funcionario {
 		salarioDoFuncionario += salarioDoFuncionario * (percentual/100);
 	}
 	
+	public String toString() {
+		return identidadeDoFuncionario + ", " 
+				+ nomeDoFuncionario;
+	}
+	
 	
 	
 	
